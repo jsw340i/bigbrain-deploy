@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import Button from 'react-bootstrap/Button';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Register from './Register';
 import Login from './Login';
@@ -39,7 +41,7 @@ function  Pages() {
     <>
       {token ? (
         <>
-          <button onClick={logout}>Logout</button>
+          <Button onClick={logout}>Logout</Button>
         </>
       ) : (
         <>
@@ -50,8 +52,8 @@ function  Pages() {
       )}
       <hr />
       <Routes>
-        <Route path="/register" element={<Register successJob={successJob} />} />
-        <Route path="/login" element={<Login successJob={successJob} />} />
+        <Route path="/register" element={<Register successJob={successJob} token={token} />} />
+        <Route path="/login" element={<Login successJob={successJob} token={token} />} />
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </>

@@ -1,11 +1,18 @@
 import { useState } from 'react';
 import axios from 'axios';
+import Button from 'react-bootstrap/Button';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-function Register({ successJob }) {
+function Register({ successJob, token}) {
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const navigate = useNavigate;
+
+    if (token) {
+        navigate('/dashboard');
+    }
     
     const register = async () => {
       try {
@@ -29,7 +36,7 @@ function Register({ successJob }) {
         Name: <input value={name} onChange={e => setName(e.target.value)} type='text'/><br />
         Password: <input value={password} onChange={e => setPassword(e.target.value)} type='password'/><br />
         Confirm Password: <input value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} type='password'/><br />
-        <button onClick={register}>Register</button>
+        <Button onClick={register}>Register</Button>
       </>
     )
 }

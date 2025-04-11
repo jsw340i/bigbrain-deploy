@@ -1,9 +1,18 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-function Login({ successJob }) {
+
+function Login({ successJob, token }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate;
+
+    if (token) {
+        navigate('/dashboard');
+    }
     
     const login = async () => {
       try {
@@ -24,7 +33,7 @@ function Login({ successJob }) {
         <h1>Login</h1>
         Email: <input value={email} onChange={e => setEmail(e.target.value)} type='text'/><br />
         Password: <input value={password} onChange={e => setPassword(e.target.value)} type='password'/><br />
-        <button onClick={login}>Login</button>
+        <Button onClick={login}>Login</Button>
       </>
     )
 }
