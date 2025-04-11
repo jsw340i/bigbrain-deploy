@@ -1,26 +1,14 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-
-import Register from './Register'
-import Login from './Login'
+import { BrowserRouter as Router } from "react-router-dom";
+import Pages from './Pages';
 
 function App() {
   return (
-    <>
-      <Router>
-        <Link to="/register">Register</Link>
-        &nbsp;|&nbsp;
-        <Link to="/login">Login</Link>
-        <hr />
-        <Routes>
-          <Route path='/register' element={<Register />} />
-          <Route path='/login' element={<Login />} />
-        </Routes>
-      </Router>
-    </>
-  )
-  
+    <Router>
+      <Pages />
+    </Router>
+  );
 }
 
-export default App
+export default App;

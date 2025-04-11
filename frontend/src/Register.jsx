@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-function Register() {
+function Register({ successJob }) {
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
@@ -15,7 +15,9 @@ function Register() {
           name: name
         });
         const token = response.data.token;
+        successJob(token);
       } catch (err) {
+        console.log(err);
         alert(err.response.data.error);
       }
     }

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-function Login() {
+function Login({ successJob }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     
@@ -12,7 +12,9 @@ function Login() {
           password: password,
         });
         const token = response.data.token;
+        successJob(token);
       } catch (err) {
+        console.log(err);
         alert(err.response.data.error);
       }
     }
