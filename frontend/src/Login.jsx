@@ -1,18 +1,15 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-function Register() {
+function Login() {
     const [email, setEmail] = useState('');
-    const [name, setName] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
     
-    const register = async () => {
+    const login = async () => {
       try {
-        const response = await axios.post('http://localhost:5005/admin/auth/register', {
+        const response = await axios.post('http://localhost:5005/admin/auth/login', {
           email: email,
           password: password,
-          name: name
         });
         const token = response.data.token;
       } catch (err) {
@@ -22,14 +19,12 @@ function Register() {
   
     return (
       <>
-        <h1>Register</h1>
+        <h1>Login</h1>
         Email: <input value={email} onChange={e => setEmail(e.target.value)} type='text'/><br />
-        Name: <input value={name} onChange={e => setName(e.target.value)} type='text'/><br />
         Password: <input value={password} onChange={e => setPassword(e.target.value)} type='password'/><br />
-        Confirm Password: <input value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} type='password'/><br />
-        <button onClick={register}>Register</button>
+        <button onClick={login}>Login</button>
       </>
     )
 }
 
-export default Register;
+export default Login;
