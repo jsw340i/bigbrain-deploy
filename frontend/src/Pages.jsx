@@ -10,15 +10,19 @@ import Dashboard from './Dashboard';
 
 function  Pages() {
   const [token, setToken] = useState(null);
+  const [email, setEmail] = useState(null);
   const navigate = useNavigate();
   
   useEffect(() => {
     setToken(localStorage.getItem('token'));
+    setEmail(localStorage.getItem('email'));
   }, []);
 
-  const successJob = (token) => {
+  const successJob = (token, email) => {
     localStorage.setItem('token', token);
+    localStorage.setItem('email', email);
     setToken(token);
+    setEmail(email);
     navigate('/dashboard');
   } 
 
@@ -30,6 +34,8 @@ function  Pages() {
         }
       });
       localStorage.removeItem('token');
+      localStorage.removeItem('email');
+      setEmail(null);
       setToken(null);
       navigate('/login');
     } catch (err) {

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function Register({ successJob, token}) {
+function Register({ successJob, token }) {
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
@@ -29,9 +29,8 @@ function Register({ successJob, token}) {
           name: name
         });
         const token = response.data.token;
-        successJob(token);
+        successJob(token, email);
       } catch (err) {
-        console.log(err);
         alert(err.response.data.error);
       }
     }

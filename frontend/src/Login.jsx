@@ -23,9 +23,8 @@ function Login({ successJob, token }) {
         password: password,
       });
       const token = response.data.token;
-      successJob(token);
+      successJob(token, email);
     } catch (err) {
-      console.log(err);
       alert(err.response.data.error);
     }
   }
