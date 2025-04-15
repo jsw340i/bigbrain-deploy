@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Register from './Register';
 import Login from './Login';
 import Dashboard from './Dashboard';
+import EditGame from './EditGame';
 
 function  Pages() {
   const [token, setToken] = useState(null);
@@ -61,6 +62,7 @@ function  Pages() {
         <Route path="/register" element={<Register successJob={successJob} token={token} />} />
         <Route path="/login" element={<Login successJob={successJob} token={token} />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/game/:id" element={<EditGame />} />
       </Routes>
     </>
   );
