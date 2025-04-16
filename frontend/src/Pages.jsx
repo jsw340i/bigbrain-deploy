@@ -8,6 +8,7 @@ import Register from './Register';
 import Login from './Login';
 import Dashboard from './Dashboard';
 import EditGame from './EditGame';
+import EditQuestion from './EditQuestion';
 
 function  Pages() {
   const [token, setToken] = useState(null);
@@ -63,6 +64,7 @@ function  Pages() {
         <Route path="/login" element={<Login successJob={successJob} token={token} />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/game/:gameId" element={<EditGame />} />
+        <Route path="/game/:gameId/question/:question_id" element={<EditQuestion />} />
       </Routes>
     </>
   );

@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function EditGame() {
   const { gameId } = useParams();
   const navigate = useNavigate();
-  const token = localStorage.getItem('token'); 
+  const token = localStorage.getItem('token');
 
   const [games, setGames] = useState([]);
   const [game, setGame] = useState(null);
   const [name, setName] = useState('');
   const [questions, setQuestions] = useState([]);
   const [newQuestion, setNewQuestion] = useState('');
-
 
   useEffect(() => {
     axios.get('http://localhost:5005/admin/games', {
@@ -34,30 +33,28 @@ function EditGame() {
 
   useEffect(() => {
     if (!game) return;
-  
+
     const updatedGames = games.map(g =>
       g.id.toString() === gameId ? { ...g, name, questions } : g
     );
-  
+
     axios.put('http://localhost:5005/admin/games', {
       games: updatedGames
     }, {
       headers: {
         Authorization: `Bearer ${token}`
       }
-    }).then(() => {
     }).catch(err => alert(err.response.data.error));
-  
-  }, [questions]); // Triggers ONLY when `questions` changes
-  
+
+  }, [questions]);
 
   const handleSave = async () => {
     if (!game) return;
-  
+
     const updatedGames = games.map(g =>
       g.id.toString() === gameId ? { ...g, name, questions } : g
     );
-  
+
     try {
       await axios.put('http://localhost:5005/admin/games', {
         games: updatedGames
@@ -72,7 +69,6 @@ function EditGame() {
       alert(err.response.data.error);
     }
   };
-  
 
   const handleDeleteQuestion = (index) => {
     const newQuestions = [...questions];
@@ -80,7 +76,6 @@ function EditGame() {
     setQuestions(newQuestions);
     alert('Question deleted!');
   };
-  
 
   const handleAddQuestion = () => {
     if (!newQuestion.trim()) return;
@@ -90,7 +85,6 @@ function EditGame() {
     alert('Question added!');
     navigate('/dashboard');
   };
-  
 
   return (
     <div>
@@ -111,7 +105,10 @@ function EditGame() {
           <div key={index} style={{ border: '1px solid gray', padding: '10px', marginBottom: '5px' }}>
             <p><strong>Question:</strong> {q.question}</p>
             <Button variant="danger" onClick={() => handleDeleteQuestion(index)}>Delete</Button>
-            {/* Later: Add edit button here too */}
+            <p>{`Question ID: ${q.id}`}</p>
+            <Link to={`/game/${gameId}/question/${index}`}>
+              <Button variant="info">Edit Question</Button>
+            </Link>
           </div>
         ))
       )}
