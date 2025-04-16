@@ -71,6 +71,9 @@ function Dashboard() {
 
   return (
     <>
+			<u>
+				<h5>Hi <strong>{email}</strong></h5>
+			</u>
       <h1>Dashboard</h1>
       <Button onClick={() => setShowCreateForm(!showCreateForm)} variant="outline-secondary">
         + Create Game

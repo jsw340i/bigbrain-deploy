@@ -65,6 +65,7 @@ function  Pages() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/game/:gameId" element={<EditGame />} />
         <Route path="/game/:gameId/question/:question_id" element={<EditQuestion />} />
+
       </Routes>
     </>
   );
