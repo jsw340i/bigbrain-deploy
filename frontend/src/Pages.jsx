@@ -62,7 +62,7 @@ function  Pages() {
         <Route path="/register" element={<Register successJob={successJob} token={token} />} />
         <Route path="/login" element={<Login successJob={successJob} token={token} />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/game/:id" element={<EditGame />} />
+        <Route path="/game/:gameId" element={<EditGame />} />
       </Routes>
     </>
   );
