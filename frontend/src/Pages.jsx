@@ -50,6 +50,12 @@ function  Pages() {
       {token ? (
         <>
           <Button onClick={logout}>Logout</Button>
+          <div style={{ textAlign: 'right', marginRight: '50px' }}>
+            <h5>
+              User Logged in:  <strong><u>{email}</u></strong>
+            </h5>
+          </div>
+
         </>
       ) : (
         <>
@@ -64,7 +70,7 @@ function  Pages() {
         <Route path="/login" element={<Login successJob={successJob} token={token} />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/game/:gameId" element={<EditGame />} />
-        <Route path="/game/:gameId/question/:question_id" element={<EditQuestion />} />
+        <Route path="/game/:gameId/question/:questionId" element={<EditQuestion />} />
 
       </Routes>
     </>
