@@ -8,6 +8,8 @@ function Dashboard() {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newGameName, setNewGameName] = useState('');
   const [games, setGames] = useState({});
+  const [activeSessionId, setActiveSessionId] = useState(null); 
+  const [sessionModalGameId, setSessionModalGameId] = useState(null); 
 
   const token = localStorage.getItem('token');
   const email = localStorage.getItem('email');
@@ -24,44 +26,139 @@ function Dashboard() {
   };
 
   const createGame = async (e) => {
-		e.preventDefault();
-		const newGameId = Date.now();
-	
-		try {
-			const res = await axios.get('http://localhost:5005/admin/games', {
-				headers: { Authorization: `Bearer ${token}` }
-			});
-			const currentGames = res.data.games;
-	
-			const updatedGames = [
-				...Object.values(currentGames),
-				{
-					id: newGameId,
-					name: newGameName,
-					owner: email,
-					questions: [],
-					oldSessions: [],
-					active: null
-				}
-			];
-	
-			await axios.put('http://localhost:5005/admin/games', {
-				games: updatedGames
-			}, {
-				headers: {
-					Authorization: `Bearer ${token}`
-				}
-			});
-	
-			setNewGameName('');
-			setShowCreateForm(false);
-	
-			await fetchGames(); // Re-fetch to get fresh game IDs and structure
-		} catch (err) {
-			alert(err.response.data.error);
-		}
-	};
-	
+    e.preventDefault();
+    const newGameId = Date.now();
+  
+    try {
+      const res = await axios.get('http://localhost:5005/admin/games', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const currentGames = res.data.games;
+  
+      const updatedGames = [
+        ...Object.values(currentGames),
+        {
+          id: newGameId,
+          name: newGameName,
+          owner: email,
+          questions: [],
+          oldSessions: [],
+          active: null
+        }
+      ];
+  
+      await axios.put('http://localhost:5005/admin/games', {
+        games: updatedGames
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+  
+      setNewGameName('');
+      setShowCreateForm(false);
+  
+      await fetchGames();
+    } catch (err) {
+      alert(err.response.data.error);
+    }
+  };
+
+  const startSession = async (gameId) => {
+    try {
+      const owner = localStorage.getItem('email');
+  
+      const res = await axios.post(
+        `http://localhost:5005/admin/game/${gameId}/mutate`,
+        { mutationType: 'START' },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+  
+      const { sessionId } = res.data;
+      setActiveSessionId(sessionId);
+      setSessionModalGameId(gameId);
+  
+      // Get current games
+      const currentGamesRes = await axios.get('http://localhost:5005/admin/games', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+  
+      const currentGames = currentGamesRes.data.games;
+  
+      // Modify only the target game
+      const updatedGames = Object.values(currentGames).map(game => {
+        if (game.id === gameId) {
+          return { ...game, active: sessionId, owner };
+        }
+        return game;
+      });
+  
+      // Send full games list
+      await axios.put(
+        `http://localhost:5005/admin/games`,
+        { games: updatedGames },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+  
+      await fetchGames();
+    } catch (err) {
+      console.error('Error response:', err.response);
+      alert('Failed to start session: ' + (err.response.data.error || err.message));
+    }
+  };
+  
+  const stopSession = async (gameId) => {
+    try {
+      const owner = localStorage.getItem('email');
+  
+      const res = await axios.post(
+        `http://localhost:5005/admin/game/${gameId}/mutate`,
+        { mutationType: 'END' },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+  
+      const { sessionId } = res.data;
+      setActiveSessionId(null);
+  
+      const currentGamesRes = await axios.get('http://localhost:5005/admin/games', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+  
+      const currentGames = currentGamesRes.data.games;
+  
+      const updatedGames = Object.values(currentGames).map(game => {
+        if (game.id === gameId) {
+          return { ...game, active: null, owner };
+        }
+        return game;
+      });
+  
+      await axios.put(
+        `http://localhost:5005/admin/games`,
+        { games: updatedGames },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      await fetchGames();
+    } catch (err) {
+      console.error('Error response:', err.response);
+      alert('Failed to stop session: ' + (err.response.data.error || err.message));
+    }
+  };
+  
+  
 
   useEffect(() => {
     if (token) fetchGames();
@@ -108,7 +205,20 @@ function Dashboard() {
             <h3>{game.name}</h3>
             <p>Questions: {game.questions?.length || 0}</p>
             <p>Total Duration: {Number(totalDuration)} seconds</p>
-            <Link to={`/game/${game.id}`}>Edit Game</Link>
+            <Link to={`/game/${game.id}`}>Edit Game</Link><br />
+
+            {game.active ? (
+              <div>
+                <p>Active Session ID: {game.active}</p>
+                <Button variant="danger" onClick={() => stopSession(game.id)}>
+                  Stop Session
+                </Button>
+              </div>
+            ) : (
+              <Button onClick={() => startSession(game.id)} variant="primary">
+                Start Game Session
+              </Button>
+            )}
           </div>
         );
       })}
@@ -117,3 +227,4 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
