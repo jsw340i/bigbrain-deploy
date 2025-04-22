@@ -75,10 +75,12 @@ function Dashboard() {
           headers: { Authorization: `Bearer ${token}` }
         }
       );
-  
-      const { sessionId } = res.data;
+
+      const { sessionId } = res.data.data;
       setActiveSessionId(sessionId);
       setSessionModalGameId(gameId);
+
+			alert(`Game session started!\nSession ID: ${sessionId}`);
   
       // Get current games
       const currentGamesRes = await axios.get('http://localhost:5005/admin/games', {
@@ -124,8 +126,9 @@ function Dashboard() {
           headers: { Authorization: `Bearer ${token}` }
         }
       );
-  
+			
       const { sessionId } = res.data;
+			const currentSessionId = activeSessionId;
       setActiveSessionId(null);
   
       const currentGamesRes = await axios.get('http://localhost:5005/admin/games', {
@@ -152,13 +155,15 @@ function Dashboard() {
       );
 
       await fetchGames();
+			const goToResults = window.confirm('The session has ended. Would you like to view the results?');
+			if (goToResults) {
+				window.location.href = `/session/${currentSessionId}`;
+			}
     } catch (err) {
       console.error('Error response:', err.response);
       alert('Failed to stop session: ' + (err.response.data.error || err.message));
     }
   };
-  
-  
 
   useEffect(() => {
     if (token) fetchGames();
