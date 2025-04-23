@@ -171,6 +171,30 @@ function Dashboard() {
 
   const gameArray = Object.values(games);
 
+	function SessionLink({ sessionId }) {
+		const [copied, setCopied] = useState(false);
+		const joinUrl = `${window.location.origin}/play/join/${sessionId}`;
+	
+		const handleCopy = async () => {
+			try {
+				await navigator.clipboard.writeText(joinUrl);
+				setCopied(true);
+				setTimeout(() => setCopied(false), 2000);
+			} catch (err) {
+				console.error('Failed to copy:', err);
+			}
+		};
+	
+		return (
+			<p>
+				Active Session ID: <strong>{sessionId}</strong>{' '}
+				<button onClick={handleCopy} style={{ marginLeft: '10px' }}>
+					📋 {copied ? 'Copied!' : 'Copy Link'}
+				</button>
+			</p>
+		);
+	}
+
   return (
     <>
       <h1>Dashboard</h1>
@@ -214,7 +238,7 @@ function Dashboard() {
 
             {game.active ? (
               <div>
-                <p>Active Session ID: {game.active}</p>
+								<SessionLink sessionId={game.active} />
                 <Button variant="danger" onClick={() => stopSession(game.id)}>
                   Stop Session
                 </Button>
