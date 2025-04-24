@@ -13,6 +13,7 @@ import SessionResult from './SessionResult';
 import JoinSession from './JoinSession';
 import EnterName from './EnterName';
 import Game from './Game';
+import GameResults from './GameResults';
 
 function  Pages() {
   const [token, setToken] = useState(null);
@@ -86,6 +87,7 @@ function  Pages() {
         <Route path="/play/join" element={<JoinSession />} />
         <Route path="/play/join/:sessionId" element={<EnterName />} />
         <Route path="/play/:sessionId/game" element={<Game />} />
+        <Route path="/play/:playerId/results" element={<GameResults />} />
       </Routes>
     </>
   );

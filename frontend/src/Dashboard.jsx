@@ -166,25 +166,18 @@ function Dashboard() {
   };
 
 	const advanceSession = async (gameId) => {
-		console.log(activeSessionId);
 		try {
-			// Get current game state
 			const res = await axios.get(
 				`http://localhost:5005/admin/session/${activeSessionId}/status`,
 				{
 					headers: { Authorization: `Bearer ${token}` }
 				}
 			);
-			const atQuestion = res.data.results.position;
+			const atQuestion = res.data.results.position + 1;
 			const questions = res.data.results.questions;
-	
-			console.log(`Current question index: ${atQuestion}`);
-			console.log(`Total questions: ${questions.length}`);
-	
-			if ((atQuestion + 1) >= questions.length) {
+			if (atQuestion === questions.length) {
 				stopSession(gameId);
 			} else {
-				// More questions available: go to next one
 				await axios.post(
 					`http://localhost:5005/admin/game/${gameId}/mutate`,
 					{ mutationType: 'ADVANCE' },
@@ -193,13 +186,12 @@ function Dashboard() {
 					}
 				);
 			}
+			alert('You Have Moved To The Next Question');
 		} catch (err) {
 			alert('Failed to advance session: ' + err.message);
 		}
 	};
 	
-	
-
   useEffect(() => {
     if (token) fetchGames();
   }, [token]);

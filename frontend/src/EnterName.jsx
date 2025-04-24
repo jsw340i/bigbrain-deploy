@@ -22,6 +22,8 @@ function EnterName() {
         },
         name: name,
       });
+      const Id_player = response.data.playerId;
+      localStorage.setItem('playerId', Id_player);
       navigate(`/play/${sessionId}/game`);
     } catch (err) {
       setError(err.message);

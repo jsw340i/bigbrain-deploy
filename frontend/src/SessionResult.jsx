@@ -83,7 +83,7 @@ function SessionResult() {
       setResults({ players, questions });
       setSessionActive(false);
     } catch (error) {
-      console.error('Error fetching session results:', error);
+      alert(`Error fetching session results:${error}`);
     }
   };
   
@@ -94,7 +94,7 @@ function SessionResult() {
       });
       alert('Advanced to next question.');
     } catch (error) {
-      console.error('Error advancing session:', error);
+      alert(`Error advancing session::${error}`, );
     }
   };
 
@@ -106,7 +106,7 @@ function SessionResult() {
       setSessionActive(false);
       fetchResults(); 
     } catch (error) {
-      console.error('Error ending session:', error);
+      alert(`Error ending session:${error}`);
     }
   };
 
@@ -116,8 +116,6 @@ function SessionResult() {
     return () => clearInterval(interval);
   }, []);
 
-  console.log('Results:', results);
-  console.log('Players:', results?.players);
 
   return (
     <div className="p-4">
