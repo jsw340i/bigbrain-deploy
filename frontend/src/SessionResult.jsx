@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Bar, Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -46,7 +47,7 @@ function SessionResult() {
         setSessionActive(true);
         return;
       }
-      
+
       const players = raw.results.map(result => ({
         name: result.name,
         answers: result.answers

@@ -165,6 +165,41 @@ function Dashboard() {
     }
   };
 
+	const advanceSession = async (gameId) => {
+		console.log(activeSessionId);
+		try {
+			// Get current game state
+			const res = await axios.get(
+				`http://localhost:5005/admin/session/${activeSessionId}/status`,
+				{
+					headers: { Authorization: `Bearer ${token}` }
+				}
+			);
+			const atQuestion = res.data.results.position;
+			const questions = res.data.results.questions;
+	
+			console.log(`Current question index: ${atQuestion}`);
+			console.log(`Total questions: ${questions.length}`);
+	
+			if ((atQuestion + 1) >= questions.length) {
+				stopSession(gameId);
+			} else {
+				// More questions available: go to next one
+				await axios.post(
+					`http://localhost:5005/admin/game/${gameId}/mutate`,
+					{ mutationType: 'ADVANCE' },
+					{
+						headers: { Authorization: `Bearer ${token}` }
+					}
+				);
+			}
+		} catch (err) {
+			alert('Failed to advance session: ' + err.message);
+		}
+	};
+	
+	
+
   useEffect(() => {
     if (token) fetchGames();
   }, [token]);
@@ -239,6 +274,10 @@ function Dashboard() {
             {game.active ? (
               <div>
 								<SessionLink sessionId={game.active} />
+								<Button variant="success" onClick={() => advanceSession(game.id)}>
+									Next Question (Advance)
+								</Button>
+								<br />
                 <Button variant="danger" onClick={() => stopSession(game.id)}>
                   Stop Session
                 </Button>
