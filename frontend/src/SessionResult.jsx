@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
@@ -32,6 +32,7 @@ ChartJS.register(
 
 function SessionResult() {
   const { sessionId } = useParams();
+  const { gameId } = useParams();
   const [results, setResults] = useState(null);
   const [sessionActive, setSessionActive] = useState(true);
   const navigate = useNavigate();
@@ -95,7 +96,7 @@ function SessionResult() {
         `http://localhost:5005/admin/game/${gameId}/mutate`,
         { mutationType: 'ADVANCE' },
         {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         }
       );
       alert('Advanced to next question.');
@@ -106,11 +107,11 @@ function SessionResult() {
 
   const stopSession = async () => {
     try {
-      const res = await axios.post(
+      await axios.post(
         `http://localhost:5005/admin/game/${gameId}/mutate`,
         { mutationType: 'END' },
         {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         }
       );
       setSessionActive(false);

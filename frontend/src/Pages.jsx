@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
@@ -36,7 +36,7 @@ function  Pages() {
 
   const logout = async () => {
     try {
-      const response = await axios.post('http://localhost:5005/admin/auth/logout', {}, {
+      await axios.post('http://localhost:5005/admin/auth/logout', {}, {
         headers: {
           'Authorization': `Bearer ${token}`,
         }
@@ -83,7 +83,7 @@ function  Pages() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/game/:gameId" element={<EditGame />} />
         <Route path="/game/:gameId/question/:questionId" element={<EditQuestion />} />
-        <Route path="/session/:sessionId" element={<SessionResult />} />
+        <Route path="/session/:sessionId/:gameId" element={<SessionResult />} />
         <Route path="/play/join" element={<JoinSession />} />
         <Route path="/play/join/:sessionId" element={<EnterName />} />
         <Route path="/play/:sessionId/game" element={<Game />} />

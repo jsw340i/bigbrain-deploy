@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
@@ -9,8 +9,7 @@ function EditQuestion() {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
 
-  const [game, setGame] = useState(null);
-  const [question, setQuestion] = useState(null);
+
   const [questionText, setQuestionText] = useState('');
   const [duration, setDuration] = useState('');
   const [points, setPoints] = useState('');
@@ -26,10 +25,8 @@ function EditQuestion() {
     }).then(res => {
       const foundGame = res.data.games.find(g => g.id.toString() === gameId);
       if (foundGame) {
-        setGame(foundGame);
         const foundQ = foundGame.questions.find(q => q.id === questionId);
         if (foundQ) {
-          setQuestion(foundQ);
           setQuestionText(foundQ.question || '');
           setDuration(foundQ.duration || '');
           setPoints(foundQ.points || '');
@@ -84,7 +81,7 @@ function EditQuestion() {
       alert('Question updated!');
       navigate(`/dashboard`);
     } catch (err) {
-      alert('Failed to update question.');
+      alert(`Failed to update question: ${err}`);
     }
   };
 

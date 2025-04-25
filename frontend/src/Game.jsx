@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
@@ -16,7 +16,6 @@ function Game() {
   const [isAnswered, setIsAnswered] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState(null);
   const [sessionStarted, setSessionStarted] = useState(false);
-  const [timerExpired, setTimerExpired] = useState(false); 
   const [hasSubmitted, setHasSubmitted] = useState(false); 
   const isMounted = useRef(true);
 
@@ -64,7 +63,6 @@ function Game() {
           setIsAnswered(false);
           setCorrectAnswer(null);
           setHasSubmitted(false); 
-          setTimerExpired(false); 
         }
 
         if (!stopPolling && isMounted.current) {
@@ -118,6 +116,7 @@ function Game() {
       setCorrectAnswer(res.data.answers);
       setIsAnswered(true); 
     } catch (err) {
+      void err;
     }
   };
 
@@ -125,7 +124,6 @@ function Game() {
     if (hasSubmitted || correctAnswer !== null) return; // Don't fetch again if already submitted or fetched
 
     try {
-      setTimerExpired(true); 
       const res = await axios.get(`http://localhost:5005/play/${playerId}/answer`);
       setCorrectAnswer(res.data.answers);
       setIsAnswered(true); 
@@ -157,7 +155,7 @@ function Game() {
     return (
       <div style={{ textAlign: 'center', paddingTop: '50px' }}>
         <h2>🎉 Welcome to the Game Lobby!</h2>
-        <p>We're waiting for the host to start the quiz...</p>
+        <p>We&apos;re waiting for the host to start the quiz...</p>
         <div style={{ marginTop: '30px' }}>
           <img
             src="https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif"
@@ -211,8 +209,8 @@ function Game() {
                   isAnswered && correctAnswer?.includes(answer)
                     ? 'lightgreen'
                     : selectedAnswers.includes(answer)
-                    ? 'lightblue'
-                    : '',
+                      ? 'lightblue'
+                      : '',
               }}
             >
               {answer}
@@ -223,7 +221,7 @@ function Game() {
 
       {isAnswered && (
         <>
-          {timeLeft === 0 && !hasSubmitted && <p>⏰ Time's up!</p>}
+          {timeLeft === 0 && !hasSubmitted && <p>⏰ Time&apos;s up!</p>}
           {correctAnswer && (
             <p>
               ✅ Correct Answer(s): <strong>{correctAnswer.join(', ')}</strong>
@@ -245,7 +243,7 @@ function Game() {
             </p>
           )}
           {!hasSubmitted && timeLeft === 0 && selectedAnswers.length === 0 && (
-            <p>You didn't select an answer in time. ⌛</p>
+            <p>You didn&apos;t select an answer in time. ⌛</p>
           )}
         </>
       )}

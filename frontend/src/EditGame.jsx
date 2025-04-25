@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
@@ -20,16 +20,16 @@ function EditGame() {
     axios.get('http://localhost:5005/admin/games', {
       headers: { Authorization: `Bearer ${token}` }
     })
-    .then(res => {
-      setGames(res.data.games);
-      const foundGame = res.data.games.find(g => g.id.toString() === gameId);
-      if (foundGame) {
-        setGame(foundGame);
-        setName(foundGame.name);
-        setQuestions(foundGame.questions || []);
-      }
-    })
-    .catch(err => alert(err));
+      .then(res => {
+        setGames(res.data.games);
+        const foundGame = res.data.games.find(g => g.id.toString() === gameId);
+        if (foundGame) {
+          setGame(foundGame);
+          setName(foundGame.name);
+          setQuestions(foundGame.questions || []);
+        }
+      })
+      .catch(err => alert(err));
   }, [gameId, token]);
 
   useEffect(() => {
