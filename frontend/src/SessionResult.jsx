@@ -45,7 +45,7 @@ function SessionResult() {
     
       const raw = response.data;
   
-      if (!raw || !raw.results || raw.results.length === 0) {
+      if (!raw || !raw.results) {
         setResults({ players: [], questions: [] });
         setSessionActive(true);
         return;

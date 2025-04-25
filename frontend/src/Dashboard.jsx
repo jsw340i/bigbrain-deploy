@@ -233,7 +233,7 @@ function Dashboard () {
             required
             style={{ marginRight: '10px' }}
           />
-          <Button type="submit">Create</Button>
+          <Button name="create" type="submit">Create</Button>
         </form>
       )}
 
