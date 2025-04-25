@@ -87,7 +87,7 @@ function  Pages() {
         <Route path="/play/join" element={<JoinSession />} />
         <Route path="/play/join/:sessionId" element={<EnterName />} />
         <Route path="/play/:sessionId/game" element={<Game />} />
-        <Route path="/play/:playerId/results" element={<GameResults />} />
+        <Route path="/play/:playerId/results/:sessionId" element={<GameResults />} />
       </Routes>
     </>
   );

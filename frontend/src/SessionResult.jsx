@@ -13,7 +13,8 @@ import {
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 } from 'chart.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -25,7 +26,8 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
 function SessionResult() {
@@ -39,7 +41,7 @@ function SessionResult() {
       const response = await axios.get(`http://localhost:5005/admin/session/${sessionId}/results`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
-  
+    
       const raw = response.data;
   
       if (!raw || !raw.results || raw.results.length === 0) {
@@ -89,9 +91,13 @@ function SessionResult() {
   
   const advanceSession = async () => {
     try {
-      await axios.post(`http://localhost:5005/admin/session/${sessionId}/advance`, {}, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      });
+      await axios.post(
+        `http://localhost:5005/admin/game/${gameId}/mutate`,
+        { mutationType: 'ADVANCE' },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
       alert('Advanced to next question.');
     } catch (error) {
       alert(`Error advancing session::${error}`, );
@@ -100,9 +106,13 @@ function SessionResult() {
 
   const stopSession = async () => {
     try {
-      await axios.post(`http://localhost:5005/admin/session/${sessionId}/end`, {}, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      });
+      const res = await axios.post(
+        `http://localhost:5005/admin/game/${gameId}/mutate`,
+        { mutationType: 'END' },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
       setSessionActive(false);
       fetchResults(); 
     } catch (error) {

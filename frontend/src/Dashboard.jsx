@@ -246,7 +246,7 @@ function Dashboard() {
       {gameArray.length === 0 && <p style={{ marginTop: '20px' }}>No games found.</p>}
 
       {gameArray.map((game) => {
-        const totalDuration = game.questions?.reduce((sum, q) => sum + (q.duration || 0), 0) || 0;
+       const totalDuration = game.questions?.reduce((sum, q) => sum + Number(q.duration || 0), 0) || 0;
         return (
           <div
             key={game.id}
